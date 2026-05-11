@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IMT Application Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #1B4F8A;
+      --teal:   #1B7A5A;
+      --text:   #111;
+      --sub:    #555;
+      --mute:   #888;
+      --border: #e0e0e0;
+      --bg:     #f7f8fa;
+    }
+
+    body {
+      font-family: 'DM Sans', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .page {
+      max-width: 560px;
+      width: 100%;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1B4F8A 0%, #1B7A5A 100%);
+      border-radius: 16px;
+      color: #fff;
+      padding: 2.5rem 2rem 2rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 10px;
+    }
+
+    .header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+
+    .header p {
+      font-size: 14px;
+      opacity: 0.85;
+      line-height: 1.6;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .card-link {
+      display: block;
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem 1.75rem;
+      text-decoration: none;
+      color: inherit;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+    }
+
+    .card-link:hover {
+      border-color: var(--navy);
+      box-shadow: 0 4px 20px rgba(27, 79, 138, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .card-arrow {
+      font-size: 18px;
+      color: var(--navy);
+      opacity: 0.5;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .card-desc {
+      font-size: 13.5px;
+      color: var(--sub);
+      line-height: 1.6;
+    }
+
+    .tag {
+      display: inline-block;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      padding: 3px 10px;
+      border-radius: 99px;
+      background: #EBF2FA;
+      color: var(--navy);
+      border: 1px solid rgba(27, 79, 138, 0.2);
+      margin-bottom: 10px;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--mute);
+      margin-top: 0.5rem;
+    }
+
+    .footer a {
+      color: var(--navy);
+      text-decoration: none;
+    }
+
+    .footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="eyebrow">Internal Medicine Training · 2026 Recruitment</div>
+    <h1>IMT Application Tracker</h1>
+    <p>Tools to help you optimise your portfolio and prepare a competitive IMT application.</p>
+  </div>
+
+  <a class="card-link" href="/imt-checklist.html">
+    <span class="tag">Scoring Checklist</span>
+    <div class="card-top">
+      <div class="card-title">IMT Application Tracker Checklist</div>
+      <div class="card-arrow">→</div>
+    </div>
+    <div class="card-desc">
+      Self-assessment checklist based on the official IMT scoring domains — Qualifications, Presentations, Publications, Teaching, Training in Teaching, and Quality Improvement. Includes a live score meter and preparation sections for MSRA, MRCP, and application admin. Print or save as PDF to share with candidates.
+    </div>
+  </a>
+
+  <div class="footer">
+    Scoring based on guidance at
+    <a href="https://www.imtrecruitment.org.uk/recruitment-process/applying/application-scoring" target="_blank" rel="noopener noreferrer">imtrecruitment.org.uk</a>
+    · 2026 recruitment round
+  </div>
+
+</div>
+</body>
+</html>

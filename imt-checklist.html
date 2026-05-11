@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IMT Application Tracker Checklist</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #1B4F8A;
+      --teal:    #1B7A5A;
+      --purple:  #7B3FA0;
+      --orange:  #C0541A;
+      --gold:    #B5860D;
+      --red:     #8A1F1F;
+      --text:    #111;
+      --sub:     #555;
+      --mute:    #888;
+      --border:  #e0e0e0;
+      --bg:      #f7f8fa;
+    }
+
+    body {
+      font-family: 'DM Sans', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 2rem 1rem 4rem;
+    }
+
+    .page { max-width: 820px; margin: 0 auto; }
+
+    /* ── Header ── */
+    .header {
+      background: linear-gradient(135deg, #1B4F8A 0%, #1B7A5A 100%);
+      border-radius: 14px;
+      color: #fff;
+      padding: 2rem 2rem 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .header-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 6px;
+    }
+    .header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .header p {
+      font-size: 13px;
+      opacity: 0.85;
+      max-width: 540px;
+    }
+    .score-overview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 1.25rem;
+    }
+    .score-pill {
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 99px;
+      padding: 4px 14px;
+      font-size: 12px;
+      font-family: 'DM Mono', monospace;
+    }
+    .score-pill strong { font-weight: 600; }
+
+    /* ── Score meter ── */
+    .meter-wrap {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .meter-score {
+      font-family: 'DM Mono', monospace;
+      font-size: 40px;
+      font-weight: 500;
+      color: var(--navy);
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .meter-score span { font-size: 18px; color: var(--mute); font-weight: 400; }
+    .meter-right { flex: 1; min-width: 200px; }
+    .meter-label {
+      font-size: 12px;
+      color: var(--sub);
+      margin-bottom: 8px;
+    }
+    .meter-bar {
+      height: 8px;
+      background: #e8e8e8;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .meter-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #1B4F8A, #1B7A5A);
+      border-radius: 99px;
+      transition: width 0.4s ease;
+      min-width: 0;
+    }
+    .domain-scores {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .domain-badge {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-family: 'DM Mono', monospace;
+      border: 1.5px solid #ddd;
+      color: var(--sub);
+      background: transparent;
+      cursor: default;
+    }
+    .domain-badge.scored { color: var(--teal); border-color: var(--teal); background: #E8F6F2; }
+
+    /* ── Section ── */
+    .section {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+      gap: 12px;
+    }
+    .section-header:hover { background: #fafafa; }
+    .section-header-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+    .section-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+    .section-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .section-subtitle {
+      font-size: 12px;
+      color: var(--sub);
+      margin-top: 1px;
+    }
+    .section-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 99px;
+      border: 1.5px solid;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .section-chevron {
+      color: var(--mute);
+      font-size: 14px;
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+    .section.open .section-chevron { transform: rotate(180deg); }
+    .section-body { display: none; padding: 0; }
+    .section.open .section-body { display: block; }
+    .section-info {
+      font-size: 13px;
+      color: var(--sub);
+      padding: 12px 1.25rem;
+      border-bottom: 1px solid #f0f0f0;
+      line-height: 1.6;
+      background: #fafafa;
+    }
+
+    /* ── Progress bar inside section ── */
+    .section-progress {
+      height: 3px;
+      background: #eee;
+      overflow: hidden;
+    }
+    .section-progress-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 0.4s ease;
+    }
+
+    /* ── Items ── */
+    .item {
+      border-bottom: 1px solid #f0f0f0;
+      transition: background 0.15s;
+    }
+    .item:last-child { border-bottom: none; }
+    .item-main {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 13px 1.25rem;
+      cursor: pointer;
+    }
+    .item-main:hover { background: #fafafa; }
+    .checkbox {
+      width: 20px; height: 20px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      flex-shrink: 0;
+      margin-top: 1px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+      background: transparent;
+    }
+    .checkbox svg { display: none; }
+    .item.checked .checkbox svg { display: block; }
+    .item-text { flex: 1; min-width: 0; }
+    .item-label {
+      font-size: 14px;
+      color: #222;
+      line-height: 1.4;
+      transition: color 0.15s;
+    }
+    .item-pts {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: #aaa;
+      margin-top: 2px;
+      transition: color 0.15s;
+    }
+    .item-tip-btn {
+      font-size: 13px;
+      color: #bbb;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px 4px;
+      line-height: 1;
+      flex-shrink: 0;
+      transition: color 0.15s;
+    }
+    .item-tip-btn:hover { color: #888; }
+    .item-tip {
+      display: none;
+      padding: 0 1.25rem 12px 48px;
+      font-size: 13px;
+      color: #444;
+      line-height: 1.6;
+    }
+    .item-tip-label {
+      font-size: 10px;
+      font-family: 'DM Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .item.tip-open .item-tip { display: block; }
+
+    /* Band options (single-select) */
+    .band-group { display: grid; gap: 0; }
+    .band-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 1.25rem;
+      cursor: pointer;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background 0.1s;
+    }
+    .band-option:last-child { border-bottom: none; }
+    .band-option:hover { background: #fafafa; }
+    .radio {
+      width: 18px; height: 18px;
+      border: 2px solid #ccc;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 2px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .radio-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      display: none;
+    }
+    .band-option.selected .radio-dot { display: block; }
+    .band-text { flex: 1; min-width: 0; }
+    .band-label { font-size: 13.5px; color: #222; line-height: 1.4; }
+    .band-note { font-size: 12px; color: var(--sub); margin-top: 2px; line-height: 1.5; }
+    .band-pts {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ── No-score sections (prep checklists) ── */
+    .prep-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 1.25rem;
+      border-bottom: 1px solid #f0f0f0;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    .prep-item:last-child { border-bottom: none; }
+    .prep-item:hover { background: #fafafa; }
+    .prep-check {
+      width: 20px; height: 20px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      flex-shrink: 0;
+      margin-top: 1px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+      background: transparent;
+    }
+    .prep-check svg { display: none; }
+    .prep-item.checked .prep-check svg { display: block; }
+    .prep-label { font-size: 14px; color: #222; flex: 1; line-height: 1.4; }
+    .prep-tip { font-size: 12px; color: var(--sub); margin-top: 2px; }
+
+    /* ── Note box ── */
+    .note {
+      padding: 14px 1.25rem;
+      border-radius: 10px;
+      border-left: 3px solid;
+      font-size: 12.5px;
+      line-height: 1.6;
+      color: #444;
+      margin-bottom: 1rem;
+      background: #fff;
+    }
+    .note-label {
+      font-size: 10px;
+      font-family: 'DM Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    /* ── Source footer ── */
+    .source-footer {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 11.5px;
+      color: var(--mute);
+    }
+    .source-footer a { color: var(--navy); text-decoration: none; }
+    .source-footer a:hover { text-decoration: underline; }
+
+    /* ── Print ── */
+    .print-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #fff;
+      font-size: 13px;
+      color: var(--sub);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      margin-bottom: 1.25rem;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .print-btn:hover { border-color: var(--navy); color: var(--navy); }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .print-btn, .meter-wrap { display: none; }
+      .section-body { display: block !important; }
+      .section { break-inside: avoid; }
+      .section-chevron { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      .header { padding: 1.5rem 1rem 1.25rem; }
+      .header h1 { font-size: 20px; }
+      .meter-wrap { gap: 1rem; }
+      .meter-score { font-size: 32px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-eyebrow">Internal Medicine Training · 2026 Recruitment</div>
+    <h1>IMT Application Tracker Checklist</h1>
+    <p>Based on the official self-assessment scoring published by <strong>imtrecruitment.org.uk</strong>. Use this checklist to identify gaps in your portfolio and maximise your shortlist score.</p>
+    <div class="score-overview">
+      <div class="score-pill"><strong>30 pts</strong> — self-assessment maximum</div>
+      <div class="score-pill"><strong>+5 pts</strong> — IMT-only applicant bonus</div>
+      <div class="score-pill"><strong>35 pts</strong> — total maximum</div>
+    </div>
+  </div>
+
+  <!-- Live score meter -->
+  <div class="meter-wrap">
+    <div class="meter-score" id="totalScore">0<span>/30</span></div>
+    <div class="meter-right">
+      <div class="meter-label">Self-assessment score (excluding IMT-only bonus)</div>
+      <div class="meter-bar"><div class="meter-fill" id="meterFill" style="width:0%"></div></div>
+      <div class="domain-scores" id="domainBadges"></div>
+    </div>
+  </div>
+
+  <button class="print-btn" onclick="window.print()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    Print / Save as PDF
+  </button>
+
+  <!-- ═══════════════════════════════════════════════════════
+       DOMAIN 0 — IMT-Only Bonus
+  ═══════════════════════════════════════════════════════ -->
+  <div class="note" style="border-color:#1B4F8A;">
+    <span class="note-label" style="color:#1B4F8A;">IMT-Only Applicant Bonus — +5 Points</span>
+    Applicants who apply <em>exclusively</em> to the joint IMT/ACCS-IM vacancy in Round 1 of national recruitment receive an automatic 5-point bonus. If you also apply to other specialties simultaneously, this bonus does not apply. Applying to IMT only signals a strong commitment to internal medicine.
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       DOMAIN 1 — Postgraduate Degrees & Qualifications
+  ═══════════════════════════════════════════════════════ -->
+  <div class="section open" id="sec-qual" data-domain="qual" data-max="4" data-type="band">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-dot" style="background:#7B3FA0;"></div>
+        <div>
+          <div class="section-title">Postgraduate Degrees &amp; Qualifications</div>
+          <div class="section-subtitle">Highest single option selected — not cumulative</div>
+        </div>
+      </div>
+      <span class="section-badge" id="badge-qual" style="color:#7B3FA0; border-color:#7B3FA0; background:#F4ECF7;">0/4 pts</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-progress"><div class="section-progress-fill" id="prog-qual" style="background:#7B3FA0; width:0%;"></div></div>
+    <div class="section-body">
+      <div class="section-info">Only the <strong>highest qualifying option</strong> scores. Select the one that best describes your highest postgraduate qualification. Primary medical degree (MBChB/MBBS) does not score in this domain.</div>
+      <div class="band-group" data-domain="qual">
+        <div class="band-option" data-points="4" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#7B3FA0;"></div></div>
+          <div class="band-text">
+            <div class="band-label">PhD, MD(Res), or DPhil by research</div>
+            <div class="band-note">Substantial original research; typically 2–3 years full-time. Must be awarded (not in progress) at time of application.</div>
+          </div>
+          <div class="band-pts" style="color:#7B3FA0;">+4 pts</div>
+        </div>
+        <div class="band-option" data-points="3" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#7B3FA0;"></div></div>
+          <div class="band-text">
+            <div class="band-label">Masters degree (MSc, MA, or MRes)</div>
+            <div class="band-note">Minimum eight months full-time equivalent (three university terms). Distance-learning Masters count if university-accredited.</div>
+          </div>
+          <div class="band-pts" style="color:#7B3FA0;">+3 pts</div>
+        </div>
+        <div class="band-option" data-points="1" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#7B3FA0;"></div></div>
+          <div class="band-text">
+            <div class="band-label">Postgraduate diploma or certificate</div>
+            <div class="band-note">Between one and ten months duration. MRCP(UK) and medical Royal College membership examinations do <em>not</em> qualify in this domain.</div>
+          </div>
+          <div class="band-pts" style="color:#7B3FA0;">+1 pt</div>
+        </div>
+        <div class="band-option" data-points="0" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#7B3FA0;"></div></div>
+          <div class="band-text">
+            <div class="band-label">None of the above</div>
+            <div class="band-note">Primary medical degree only — no additional postgraduate qualification.</div>
+          </div>
+          <div class="band-pts" style="color:#aaa;">0 pts</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       DOMAIN 2 — Presentations / Posters
+  ═══════════════════════════════════════════════════════ -->
+  <div class="section open" id="sec-pres" data-domain="pres" data-max="6" data-type="band">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-dot" style="background:#C0541A;"></div>
+        <div>
+          <div class="section-title">Presentations &amp; Posters</div>
+          <div class="section-subtitle">Best single option — first or second author only</div>
+        </div>
+      </div>
+      <span class="section-badge" id="badge-pres" style="color:#C0541A; border-color:#C0541A; background:#FBEEE8;">0/6 pts</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-progress"><div class="section-progress-fill" id="prog-pres" style="background:#C0541A; width:0%;"></div></div>
+    <div class="section-body">
+      <div class="section-info">Select the <strong>highest-level presentation</strong> you have given as first or second author with a peer-reviewed abstract. A document listing your abstracts is required as evidence. Co-authorship beyond second author does not qualify.</div>
+      <div class="band-group" data-domain="pres">
+        <div class="band-option" data-points="6" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#C0541A;"></div></div>
+          <div class="band-text">
+            <div class="band-label">Oral presentation at a national or international meeting</div>
+            <div class="band-note">First or second author. Peer-reviewed abstract accepted. Includes specialty conferences, RCP/RCPE meetings, and international congresses (ESC, AHA, BSG, BTS, etc.).</div>
+          </div>
+          <div class="band-pts" style="color:#C0541A;">+6 pts</div>
+        </div>
+        <div class="band-option" data-points="4" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#C0541A;"></div></div>
+          <div class="band-text">
+            <div class="band-label">Poster at a national or international meeting</div>
+            <div class="band-note">First or second author. Same documentation requirements as oral presentations above.</div>
+          </div>
+          <div class="band-pts" style="color:#C0541A;">+4 pts</div>
+        </div>
+        <div class="band-option" data-points="3" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#C0541A;"></div></div>
+          <div class="band-text">
+            <div class="band-label">Oral presentation at a regional meeting</div>
+            <div class="band-note">Participation confined to one county, deanery/medical training region, or health authority. First or second author.</div>
+          </div>
+          <div class="band-pts" style="color:#C0541A;">+3 pts</div>
+        </div>
+        <div class="band-option" data-points="2" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#C0541A;"></div></div>
+          <div class="band-text">
+            <div class="band-label">Oral presentation or poster at a local meeting</div>
+            <div class="band-note">Single hospital, trust, health board, or university. First or second author.</div>
+          </div>
+          <div class="band-pts" style="color:#C0541A;">+2 pts</div>
+        </div>
+        <div class="band-option" data-points="0" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#C0541A;"></div></div>
+          <div class="band-text">
+            <div class="band-label">None of the above</div>
+          </div>
+          <div class="band-pts" style="color:#aaa;">0 pts</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       DOMAIN 3 — Publications
+  ═══════════════════════════════════════════════════════ -->
+  <div class="section open" id="sec-pub" data-domain="pub" data-max="8" data-type="band">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-dot" style="background:#1B4F8A;"></div>
+        <div>
+          <div class="section-title">Publications</div>
+          <div class="section-subtitle">Best single option — PubMed citation required for most</div>
+        </div>
+      </div>
+      <span class="section-badge" id="badge-pub" style="color:#1B4F8A; border-color:#1B4F8A; background:#EBF2FA;">0/8 pts</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-progress"><div class="section-progress-fill" id="prog-pub" style="background:#1B4F8A; width:0%;"></div></div>
+    <div class="section-body">
+      <div class="section-info">Select the <strong>highest applicable option</strong>. All publications must relate to medicine. Work that is <em>in press</em> (accepted but not yet published) is eligible for the top two options only. You must be able to provide a PubMed ID (PMID) as evidence for any PubMed-cited entry.</div>
+      <div class="band-group" data-domain="pub">
+        <div class="band-option" data-points="8" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#1B4F8A;"></div></div>
+          <div class="band-text">
+            <div class="band-label">First author, joint-first author, or corresponding author of original research</div>
+            <div class="band-note">Published in a peer-reviewed journal with a unique PubMed ID (PMID), or formally accepted "in press". Original research only — not reviews, case reports, or letters.</div>
+          </div>
+          <div class="band-pts" style="color:#1B4F8A;">+8 pts</div>
+        </div>
+        <div class="band-option" data-points="6" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#1B4F8A;"></div></div>
+          <div class="band-text">
+            <div class="band-label">Co-author on original research</div>
+            <div class="band-note">Named on the PubMed author list for published or in-press original research. You are listed as an author (not acknowledgements only).</div>
+          </div>
+          <div class="band-pts" style="color:#1B4F8A;">+6 pts</div>
+        </div>
+        <div class="band-option" data-points="5" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#1B4F8A;"></div></div>
+          <div class="band-text">
+            <div class="band-label">Multiple other PubMed-cited publications</div>
+            <div class="band-note">Editorials, systematic reviews, case reports, letters — more than one article. All must have unique PMIDs.</div>
+          </div>
+          <div class="band-pts" style="color:#1B4F8A;">+5 pts</div>
+        </div>
+        <div class="band-option" data-points="5" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#1B4F8A;"></div></div>
+          <div class="band-text">
+            <div class="band-label">Book chapter(s) related to medicine</div>
+            <div class="band-note">Published by an independent publishing house — self-published works do not count. Must relate to medicine or healthcare.</div>
+          </div>
+          <div class="band-pts" style="color:#1B4F8A;">+5 pts</div>
+        </div>
+        <div class="band-option" data-points="3" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#1B4F8A;"></div></div>
+          <div class="band-text">
+            <div class="band-label">Single other PubMed-cited publication</div>
+            <div class="band-note">One editorial, review, case report, or letter — with a PMID. Case reports in BMJ Case Reports, JRSM, or specialty journals qualify.</div>
+          </div>
+          <div class="band-pts" style="color:#1B4F8A;">+3 pts</div>
+        </div>
+        <div class="band-option" data-points="1" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#1B4F8A;"></div></div>
+          <div class="band-text">
+            <div class="band-label">Abstracts, non-peer-reviewed articles, or non-PubMed-cited publications</div>
+            <div class="band-note">Conference abstracts, articles in non-indexed journals, or publications without a PMID.</div>
+          </div>
+          <div class="band-pts" style="color:#1B4F8A;">+1 pt</div>
+        </div>
+        <div class="band-option" data-points="0" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#1B4F8A;"></div></div>
+          <div class="band-text">
+            <div class="band-label">None of the above</div>
+          </div>
+          <div class="band-pts" style="color:#aaa;">0 pts</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       DOMAIN 4 — Teaching Experience
+  ═══════════════════════════════════════════════════════ -->
+  <div class="section open" id="sec-teach" data-domain="teach" data-max="5" data-type="band">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-dot" style="background:#1A6B8A;"></div>
+        <div>
+          <div class="section-title">Teaching Experience</div>
+          <div class="section-subtitle">Best single option — formal feedback required</div>
+        </div>
+      </div>
+      <span class="section-badge" id="badge-teach" style="color:#1A6B8A; border-color:#1A6B8A; background:#E8F4F8;">0/5 pts</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-progress"><div class="section-progress-fill" id="prog-teach" style="background:#1A6B8A; width:0%;"></div></div>
+    <div class="section-body">
+      <div class="section-info">Select the highest applicable option. All options require <strong>formal documented feedback</strong> from learners. Informal or undocumented teaching does not score. Evidence such as a letter or certificate of recognition from your organisation is required.</div>
+      <div class="band-group" data-domain="teach">
+        <div class="band-option" data-points="5" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#1A6B8A;"></div></div>
+          <div class="band-text">
+            <div class="band-label">Organised a formal teaching programme (≥3 months, regular sessions, formal feedback)</div>
+            <div class="band-note">You took the lead in organising the programme — e.g. worked with local tutors to set up a teaching series. Must have run for approximately three months or more with documented formal feedback from attendees.</div>
+          </div>
+          <div class="band-pts" style="color:#1A6B8A;">+5 pts</div>
+        </div>
+        <div class="band-option" data-points="3" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#1A6B8A;"></div></div>
+          <div class="band-text">
+            <div class="band-label">Regular teaching as part of a defined programme (≥3 months, formal feedback)</div>
+            <div class="band-note">Includes bedside/classroom teaching, mentoring, or tutoring as part of an established programme. Approximately three months or more. Formal feedback required.</div>
+          </div>
+          <div class="band-pts" style="color:#1A6B8A;">+3 pts</div>
+        </div>
+        <div class="band-option" data-points="1" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#1A6B8A;"></div></div>
+          <div class="band-text">
+            <div class="band-label">Occasional teaching (minimum 3 sessions, formal feedback)</div>
+            <div class="band-note">Less than three months in total, but at least three teaching sessions with formal feedback collected after each.</div>
+          </div>
+          <div class="band-pts" style="color:#1A6B8A;">+1 pt</div>
+        </div>
+        <div class="band-option" data-points="0" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#1A6B8A;"></div></div>
+          <div class="band-text">
+            <div class="band-label">None of the above</div>
+          </div>
+          <div class="band-pts" style="color:#aaa;">0 pts</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       DOMAIN 5 — Training in Teaching
+  ═══════════════════════════════════════════════════════ -->
+  <div class="section open" id="sec-trainteach" data-domain="trainteach" data-max="3" data-type="band">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-dot" style="background:#5A1F6B;"></div>
+        <div>
+          <div class="section-title">Training in Teaching</div>
+          <div class="section-subtitle">Best single option — university-accredited preferred</div>
+        </div>
+      </div>
+      <span class="section-badge" id="badge-trainteach" style="color:#5A1F6B; border-color:#5A1F6B; background:#F2EAF7;">0/3 pts</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-progress"><div class="section-progress-fill" id="prog-trainteach" style="background:#5A1F6B; width:0%;"></div></div>
+    <div class="section-body">
+      <div class="section-info">Distinct from <em>Teaching Experience</em> — this domain scores <strong>qualifications or training</strong> in how to teach. A PG Certificate in Medical Education scores the maximum. Many NHS trusts run these programmes at reduced or no cost for junior doctors.</div>
+      <div class="band-group" data-domain="trainteach">
+        <div class="band-option" data-points="3" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#5A1F6B;"></div></div>
+          <div class="band-text">
+            <div class="band-label">Higher qualification in teaching (PG Certificate or Diploma in Medical Education)</div>
+            <div class="band-note">University-accredited programme of at least 60 academic credit points. Confirms formal education theory underpinning your teaching practice.</div>
+          </div>
+          <div class="band-pts" style="color:#5A1F6B;">+3 pts</div>
+        </div>
+        <div class="band-option" data-points="1" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#5A1F6B;"></div></div>
+          <div class="band-text">
+            <div class="band-label">Training in teaching methods below PG Cert level</div>
+            <div class="band-note">Must include at least six hours of synchronous (live, interactive) training time. Workshops, faculty development days, or structured online courses with live sessions can qualify.</div>
+          </div>
+          <div class="band-pts" style="color:#5A1F6B;">+1 pt</div>
+        </div>
+        <div class="band-option" data-points="0" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#5A1F6B;"></div></div>
+          <div class="band-text">
+            <div class="band-label">None of the above</div>
+          </div>
+          <div class="band-pts" style="color:#aaa;">0 pts</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       DOMAIN 6 — Quality Improvement
+  ═══════════════════════════════════════════════════════ -->
+  <div class="section open" id="sec-qi" data-domain="qi" data-max="4" data-type="band">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-dot" style="background:#B5860D;"></div>
+        <div>
+          <div class="section-title">Quality Improvement</div>
+          <div class="section-subtitle">Best single option — PDSA methodology</div>
+        </div>
+      </div>
+      <span class="section-badge" id="badge-qi" style="color:#B5860D; border-color:#B5860D; background:#FEF9EC;">0/4 pts</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-progress"><div class="section-progress-fill" id="prog-qi" style="background:#B5860D; width:0%;"></div></div>
+    <div class="section-body">
+      <div class="section-info">Select the highest applicable option. Quality Improvement Projects (QIPs) use <strong>PDSA cycles</strong> (Plan–Do–Study–Act) or equivalent methodology. Direct, documented involvement in each stage is required — passive data collection alone is insufficient for full marks.</div>
+      <div class="band-group" data-domain="qi">
+        <div class="band-option" data-points="4" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#B5860D;"></div></div>
+          <div class="band-text">
+            <div class="band-label">All stages of two complete QI cycles</div>
+            <div class="band-note">Involved in every stage of two full PDSA or equivalent cycles. Both cycles must be documented with a measurable baseline, intervention, and outcome.</div>
+          </div>
+          <div class="band-pts" style="color:#B5860D;">+4 pts</div>
+        </div>
+        <div class="band-option" data-points="3" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#B5860D;"></div></div>
+          <div class="band-text">
+            <div class="band-label">Some stages of two cycles, OR all stages of one complete cycle</div>
+            <div class="band-note">Either partial involvement across two cycles, or full involvement in a single complete PDSA cycle. Must include data collection and analysis.</div>
+          </div>
+          <div class="band-pts" style="color:#B5860D;">+3 pts</div>
+        </div>
+        <div class="band-option" data-points="1" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#B5860D;"></div></div>
+          <div class="band-text">
+            <div class="band-label">Some stages of a single QI cycle</div>
+            <div class="band-note">Partial involvement in one cycle — e.g. data collection only, or planning without completing implementation and review.</div>
+          </div>
+          <div class="band-pts" style="color:#B5860D;">+1 pt</div>
+        </div>
+        <div class="band-option" data-points="0" onclick="selectBand(this)">
+          <div class="radio"><div class="radio-dot" style="background:#B5860D;"></div></div>
+          <div class="band-text">
+            <div class="band-label">None of the above</div>
+          </div>
+          <div class="band-pts" style="color:#aaa;">0 pts</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PREP — MSRA Preparation
+  ═══════════════════════════════════════════════════════ -->
+  <div class="section" id="sec-msra">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-dot" style="background:#1B4F8A;"></div>
+        <div>
+          <div class="section-title">MSRA Preparation</div>
+          <div class="section-subtitle">Does not score — but critical for shortlisting</div>
+        </div>
+      </div>
+      <span class="section-badge" style="color:#888; border-color:#ccc;">Prep</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="section-info">The MSRA (Multi-Specialty Recruitment Assessment) is sat before the portfolio assessment stage. Your MSRA score is a major shortlisting factor. It has two papers: Clinical Problem Solving (CPS) and Professional Dilemmas (PD).</div>
+      <div class="prep-item" onclick="togglePrep(this)">
+        <div class="prep-check"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="prep-label">Registered for MSRA and confirmed exam date</div><div class="prep-tip">Book early — centres fill up fast. Check the IMT recruitment timeline each year for registration windows.</div></div>
+      </div>
+      <div class="prep-item" onclick="togglePrep(this)">
+        <div class="prep-check"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="prep-label">Reviewed the MSRA blueprint and syllabus topics</div><div class="prep-tip">The MSRA blueprint is publicly available on the IMT recruitment microsite — understand what topics are tested.</div></div>
+      </div>
+      <div class="prep-item" onclick="togglePrep(this)">
+        <div class="prep-check"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="prep-label">Practising CPS questions regularly (300+ target)</div><div class="prep-tip">Passmedicine, Pastest, and BMJ OnExamination all have CPS-style questions. Daily practice is strongly recommended.</div></div>
+      </div>
+      <div class="prep-item" onclick="togglePrep(this)">
+        <div class="prep-check"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="prep-label">Completing PD practice papers and ethical scenarios</div><div class="prep-tip">PD tests ethical reasoning. Familiarise yourself with GMC Good Medical Practice principles. Avoid extreme answers.</div></div>
+      </div>
+      <div class="prep-item" onclick="togglePrep(this)">
+        <div class="prep-check"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="prep-label">Mock MSRA completed under timed conditions</div><div class="prep-tip">Time pressure is the main challenge. Simulate exam conditions at least 2–3 weeks before your sitting date.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PREP — MRCP Preparation
+  ═══════════════════════════════════════════════════════ -->
+  <div class="section" id="sec-mrcp">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-dot" style="background:#1B7A5A;"></div>
+        <div>
+          <div class="section-title">MRCP Preparation</div>
+          <div class="section-subtitle">Does not score in self-assessment — but relevant for IMT progression</div>
+        </div>
+      </div>
+      <span class="section-badge" style="color:#888; border-color:#ccc;">Prep</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="section-info">MRCP is not scored in the current self-assessment application form, but passing MRCP Part 1 before your IMT application makes you a stronger candidate and is required to progress within IMT. Starting early is highly recommended.</div>
+      <div class="prep-item" onclick="togglePrep(this)">
+        <div class="prep-check"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="prep-label">MRCP Part 1 revision plan created</div><div class="prep-tip">Aim for a structured 4–6 month revision plan. Passmedicine, OnExamination, and PassPACES are key resources.</div></div>
+      </div>
+      <div class="prep-item" onclick="togglePrep(this)">
+        <div class="prep-check"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="prep-label">MRCP Part 1 sitting date identified (or passed)</div><div class="prep-tip">Sittings are at Pearson VUE centres several times per year. Passing before your IMT application strengthens your overall profile.</div></div>
+      </div>
+      <div class="prep-item" onclick="togglePrep(this)">
+        <div class="prep-check"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="prep-label">MRCP Part 1 passed</div><div class="prep-tip">A major milestone. MRCP Part 1 is required before you can sit MRCP Part 2 Written. Aim to pass before starting IMT ST1.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PREP — Courses & Certificates
+  ═══════════════════════════════════════════════════════ -->
+  <div class="section" id="sec-courses">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-dot" style="background:#8A1F1F;"></div>
+        <div>
+          <div class="section-title">Courses &amp; Certificates</div>
+          <div class="section-subtitle">Not directly scored — but required or portfolio-strengthening</div>
+        </div>
+      </div>
+      <span class="section-badge" style="color:#888; border-color:#ccc;">Prep</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="section-info">ALS is a mandatory requirement for IMT posts. Additional courses strengthen your application narrative even where not directly scored.</div>
+      <div class="prep-item" onclick="togglePrep(this)">
+        <div class="prep-check"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="prep-label">ALS (Advanced Life Support) — completed and in date</div><div class="prep-tip">Mandatory for IMT. Valid for 4 years. Book via Resuscitation Council UK well in advance.</div></div>
+      </div>
+      <div class="prep-item" onclick="togglePrep(this)">
+        <div class="prep-check"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="prep-label">Good Clinical Practice (GCP) certification obtained</div><div class="prep-tip">Required for any research involvement. Free via NIHR Learn. Valid for 3 years — renew before application if needed.</div></div>
+      </div>
+      <div class="prep-item" onclick="togglePrep(this)">
+        <div class="prep-check"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="prep-label">Specialty course completed (echo, endoscopy, cardiology, etc.)</div><div class="prep-tip">Demonstrates subspecialty interest relevant to IMT. BSE level 1 echo, basic endoscopy, or similar courses are well regarded.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PREP — Application Admin
+  ═══════════════════════════════════════════════════════ -->
+  <div class="section" id="sec-admin">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-header-left">
+        <div class="section-dot" style="background:#2C5F2E;"></div>
+        <div>
+          <div class="section-title">Application &amp; Portfolio Admin</div>
+          <div class="section-subtitle">Essential tasks — do not leave until the last minute</div>
+        </div>
+      </div>
+      <span class="section-badge" style="color:#888; border-color:#ccc;">Admin</span>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="section-info">Administrative tasks are often left too late. The Oriel portal opens and closes to tight deadlines. Having your evidence ready in advance is critical — a randomised audit may require you to submit supporting documents.</div>
+      <div class="prep-item" onclick="togglePrep(this)">
+        <div class="prep-check"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="prep-label">Full GMC registration confirmed (full registration now required)</div><div class="prep-tip">Full GMC registration is now required at time of application. A licence to practise is not required, but full registration must be confirmed on the register.</div></div>
+      </div>
+      <div class="prep-item" onclick="togglePrep(this)">
+        <div class="prep-check"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="prep-label">Registered on Oriel (oriel.nhs.uk) and profile complete</div><div class="prep-tip">Set up your account before the application window opens. Delays at this stage can cause you to miss the deadline.</div></div>
+      </div>
+      <div class="prep-item" onclick="togglePrep(this)">
+        <div class="prep-check"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="prep-label">Current IMT person specification read and reviewed in full</div><div class="prep-tip">Available on imtrecruitment.org.uk. Scoring criteria change annually — always check the current year's specification.</div></div>
+      </div>
+      <div class="prep-item" onclick="togglePrep(this)">
+        <div class="prep-check"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="prep-label">Evidence portfolio compiled — publications, certs, audit docs</div><div class="prep-tip">Collect supporting evidence in a single folder. You may be selected for a randomised audit and required to submit this evidence at short notice.</div></div>
+      </div>
+      <div class="prep-item" onclick="togglePrep(this)">
+        <div class="prep-check"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="prep-label">ORCID iD created and publications linked</div><div class="prep-tip">Free at orcid.org. Essential for verifying your publication record. Set this up before completing your application.</div></div>
+      </div>
+      <div class="prep-item" onclick="togglePrep(this)">
+        <div class="prep-check"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="prep-label">Personal statement drafted and reviewed by a senior colleague</div><div class="prep-tip">Focus on commitment to internal medicine, career goals, and key portfolio achievements. Get this reviewed by an IMT doctor.</div></div>
+      </div>
+      <div class="prep-item" onclick="togglePrep(this)">
+        <div class="prep-check"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="prep-label">Two referees approached, confirmed, and briefed</div><div class="prep-tip">Ideally a consultant who knows your clinical work well. Give them your CV and personal statement in advance to help them write a strong reference.</div></div>
+      </div>
+      <div class="prep-item" onclick="togglePrep(this)">
+        <div class="prep-check"><svg width="10" height="8" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="prep-label">Preferred deaneries / regions shortlisted</div><div class="prep-tip">Consider training opportunities, subspecialty availability, and personal circumstances. IMT is a two-year programme initially.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer note -->
+  <div class="note" style="border-color:#1B7A5A; margin-top:1.5rem;">
+    <span class="note-label" style="color:#1B7A5A;">Important — Verify Annually</span>
+    Scoring criteria are reviewed and may change each recruitment round. Always refer to the current year's person specification and guidance at <a href="https://www.imtrecruitment.org.uk/recruitment-process/applying/application-scoring" target="_blank" rel="noopener noreferrer">imtrecruitment.org.uk</a> before submitting your application. Evidence requirements and point values on this checklist reflect the 2026 recruitment round.
+  </div>
+
+  <div class="source-footer">
+    Scoring based on official guidance at
+    <a href="https://www.imtrecruitment.org.uk/recruitment-process/applying/application-scoring" target="_blank" rel="noopener noreferrer">imtrecruitment.org.uk</a>
+    · 2026 recruitment round · Progress saved in this browser
+  </div>
+
+</div>
+
+<script>
+  // ── State ──────────────────────────────────────────────
+  const bandSelections = {};   // domain → points
+  const prepChecked   = {};    // element key → boolean
+
+  const DOMAIN_MAX = { qual: 4, pres: 6, pub: 8, teach: 5, trainteach: 3, qi: 4 };
+
+  // ── Section toggle ─────────────────────────────────────
+  function toggleSection(header) {
+    const sec = header.closest('.section');
+    sec.classList.toggle('open');
+  }
+
+  // ── Band select (single-choice per domain) ────────────
+  function selectBand(option) {
+    const group = option.closest('.band-group');
+    const domain = group.dataset.domain;
+    const pts = parseInt(option.dataset.points, 10);
+
+    group.querySelectorAll('.band-option').forEach(o => o.classList.remove('selected'));
+    option.classList.add('selected');
+
+    bandSelections[domain] = pts;
+    updateScores();
+  }
+
+  // ── Prep checkbox toggle ───────────────────────────────
+  function togglePrep(item) {
+    item.classList.toggle('checked');
+    const checkEl = item.querySelector('.prep-check');
+    if (item.classList.contains('checked')) {
+      checkEl.style.background = '#1B4F8A';
+      checkEl.style.borderColor = '#1B4F8A';
+    } else {
+      checkEl.style.background = 'transparent';
+      checkEl.style.borderColor = '#ccc';
+    }
+  }
+
+  // ── Score computation ──────────────────────────────────
+  function updateScores() {
+    let total = 0;
+
+    Object.entries(DOMAIN_MAX).forEach(([domain, max]) => {
+      const pts = Math.min(bandSelections[domain] ?? 0, max);
+      total += pts;
+
+      const badge = document.getElementById('badge-' + domain);
+      const prog  = document.getElementById('prog-'  + domain);
+
+      if (badge) {
+        badge.textContent = pts + '/' + max + ' pts';
+        badge.classList.toggle('scored', pts > 0);
+      }
+      if (prog) {
+        prog.style.width = (pts / max * 100) + '%';
+      }
+    });
+
+    const totalEl = document.getElementById('totalScore');
+    const fill    = document.getElementById('meterFill');
+
+    totalEl.innerHTML = total + '<span>/30</span>';
+    fill.style.width  = (total / 30 * 100) + '%';
+
+    updateDomainBadges(total);
+  }
+
+  function updateDomainBadges(total) {
+    const container = document.getElementById('domainBadges');
+    container.innerHTML = '';
+    const labels = { qual: 'Qualifications', pres: 'Presentations', pub: 'Publications', teach: 'Teaching', trainteach: 'Teaching Training', qi: 'QI' };
+    Object.entries(DOMAIN_MAX).forEach(([domain, max]) => {
+      const pts = Math.min(bandSelections[domain] ?? 0, max);
+      const badge = document.createElement('span');
+      badge.className = 'domain-badge' + (pts > 0 ? ' scored' : '');
+      badge.textContent = labels[domain] + ' ' + pts + '/' + max;
+      container.appendChild(badge);
+    });
+  }
+
+  // ── Init ───────────────────────────────────────────────
+  // Style checked-state band options on load (restored from a hypothetical future persist)
+  updateScores();
+</script>
+</body>
+</html>
